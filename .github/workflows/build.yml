@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
             echo "gradle-wrapper.jar not found, downloading..."
             mkdir -p gradle/wrapper
-            curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar
+            curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.5.0/gradle/wrapper/gradle-wrapper.jar
             echo "Downloaded successfully."
           else
             echo "gradle-wrapper.jar already exists."
@@ -41,7 +41,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: ./gradlew assembleDebug --no-daemon --stacktrace --no-build-cache
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
@@ -49,16 +49,3 @@ jobs:
           name: antiaging-debug-apk
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 30
-
-      - name: Build Release APK (unsigned)
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
-        continue-on-error: true
-
-      - name: Upload Release APK
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: antiaging-release-apk
-          path: app/build/outputs/apk/release/*.apk
-          retention-days: 30
-          if-no-files-found: ignore
