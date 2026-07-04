@@ -22,18 +22,10 @@ android {
         multiDexEnabled = true
     }
 
-    // 签名配置：使用 debug keystore 同时用于 debug 和 release，
-    // 确保在线打包服务无需用户提供自定义 keystore 即可生成可安装的 APK。
-    // 如需上架应用商店，请替换为正式签名。
-    signingConfigs {
-        getByName("debug") {
-            // 使用 Android 默认 debug keystore，无需额外配置
-        }
-    }
-
+        // 签名配置：debug 用默认签名，release 不签名
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("debug")
+            // debug 使用默认签名
         }
         release {
             isMinifyEnabled = false
@@ -41,8 +33,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // release 也使用 debug 签名，方便在线打包直接生成可安装 APK
-            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
