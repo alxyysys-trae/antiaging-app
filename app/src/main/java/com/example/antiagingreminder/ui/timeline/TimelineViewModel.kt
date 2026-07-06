@@ -91,7 +91,7 @@ class TimelineViewModel(private val repository: PlanRepository) : ViewModel() {
                 val calendar = Calendar.getInstance()
                 val seconds = calendar.get(Calendar.SECOND)
                 val millis = calendar.get(Calendar.MILLISECOND)
-                val delayMs = ((60 - seconds) * 1000L - millis).coerceAtLeast(1000L)
+                val delayMs = ((60 - seconds) * 1000 - millis).coerceAtLeast(1000)
                 delay(delayMs)
                 // 更新当前分钟数（驱动「现在」指示线）
                 _nowMinutes.value = DateTimeUtils.nowMinutes()

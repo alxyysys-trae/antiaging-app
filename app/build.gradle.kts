@@ -22,7 +22,8 @@ android {
         multiDexEnabled = true
     }
 
-        // 签名配置：debug 用默认签名，release 不签名
+    // 签名配置由 build.gradle.kts 顶层 signingConfigs 块处理
+    // CI 环境通过环境变量传入 keystore 路径，本地使用 debug 签名
     buildTypes {
         debug {
             // debug 使用默认签名
@@ -33,6 +34,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // release 签名由 CI 环境的 keystore 注入
+            // 如果没有配置 keystore，则生成 unsigned APK（也可安装）
         }
     }
 
